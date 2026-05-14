@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% if page.title %}{{ page.title }} — {% endif %}{{ site.title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafaf8;
+      --surface: #f2f1ee;
+      --border: #e0dfd9;
+      --text: #1a1a18;
+      --muted: #6b6b66;
+      --tag-bg: #efefeb;
+      --tag-text: #44443f;
+      --link: #2a5fa5;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #141412;
+        --surface: #1e1e1b;
+        --border: #2e2e2a;
+        --text: #f0efe9;
+        --muted: #9a9990;
+        --tag-bg: #272724;
+        --tag-text: #c8c7bf;
+        --link: #7aabf0;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18px;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
+
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 em { font-style: italic; color: var(--muted); }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      letter-spacing: -0.015em;
+      color: var(--text);
+      margin: 2.5rem 0 0.75rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+
+    h3 {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 1.5rem 0 0.4rem;
+    }
+
+    p { color: var(--muted); margin-bottom: 1rem; line-height: 1.7; }
+    p:last-child { margin-bottom: 0; }
+
+    a { color: var(--link); }
+
+    ul, ol {
+      color: var(--muted);
+      padding-left: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    li { margin-bottom: 0.3rem; }
+    strong { color: var(--text); font-weight: 500; }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    td { padding: 0.5rem 0; color: var(--muted); font-size: 15px; border-bottom: 1px solid var(--border); }
+    td:first-child { width: 160px; }
+    tr:last-child td { border-bottom: none; }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.65rem 1.5rem;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); }
+    .btn-primary:hover { opacity: 0.85; color: var(--bg); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--surface); color: var(--text); }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .card:hover { border-color: var(--text); background: var(--surface); }
+    .card h3 { margin-top: 0; }
+    .card p { font-size: 14px; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.75rem 0; }
+
+    .tag {
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 3px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .skill-group h3 {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+    }
+
+    .skill-group ul { list-style: none; padding: 0; }
+
+    .skill-group li {
+      font-size: 15px;
+      color: var(--text);
+      padding: 0.35rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skill-group li:last-child { border-bottom: none; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 2rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .timeline-item:last-child { border-bottom: none; }
+
+    .timeline-date {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      padding-top: 3px;
+    }
+
+    .timeline-body h3 { margin-top: 0; }
+
+    .timeline-company {
+      font-size: 14px;
+      color: var(--link);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.15s;
+      max-width: 360px;
+    }
+
+    .contact-link:hover { background: var(--surface); border-color: var(--text); color: var(--text); }
+    .contact-link small { color: var(--muted); font-weight: 300; margin-left: auto; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    main > * { animation: fadeUp 0.5s ease both; }
+    main > *:nth-child(2) { animation-delay: 0.08s; }
+    main > *:nth-child(3) { animation-delay: 0.14s; }
+    main > *:nth-child(4) { animation-delay: 0.2s; }
+
+    @media (max-width: 600px) {
+      .timeline-item { grid-template-columns: 1fr; gap: 0.25rem; }
+      nav { padding: 0 1rem; }
+      .nav-links { gap: 1.25rem; }
+      main { padding: 2.5rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="{{ '/' | relative_url }}" class="nav-logo">AM</a>
+    <ul class="nav-links">
+      {% for item in site.data.navigation %}
+        <li>
+          <a href="{{ item.url | relative_url }}"
+             {% if page.url == item.url %}class="active"{% endif %}>
+            {{ item.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+  <main>
+    {{ content }}
+  </main>
+
+  <footer>
+    <p>© {{ site.time | date: "%Y" }} {{ site.author.name }} · Hosted on GitHub Pages</p>
+  </footer>
+
+</body>
+</html>
